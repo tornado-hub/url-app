@@ -2,6 +2,7 @@ package Urls
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/tornado-hub/url-app/server/storage"
@@ -37,20 +38,27 @@ func GetUrls(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(urls)
 }
 
-func GetLongUrl(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func GetLongUrl(w string) {
 
-	longurl := r.URL.Query().Get("longurl")
-	if longurl == "" {
-		http.Error(w, "Parameter 'longurl' is required", http.StatusBadRequest)
-		return
-	}
+	originalUrl, _ := storage.FindLongUrl(w)
 
-	originalUrl, err := storage.FindLongUrl(longurl)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	json.NewEncoder(w).Encode(originalUrl)
+	fmt.Println(originalUrl)
 }
+
+// func GetLongUrl(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "application/json")
+
+// 	longurl := r.URL.Query().Get("longurl")
+// 	if longurl == "" {
+// 		http.Error(w, "Parameter 'longurl' is required", http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	originalUrl, err := storage.FindLongUrl(longurl)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	json.NewEncoder(w).Encode(originalUrl)
+// }

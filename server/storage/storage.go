@@ -2,15 +2,16 @@ package storage
 
 import (
 	"database/sql"
+	"fmt"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/glebarez/go-sqlite"
 )
 
 var db *sql.DB
 
 func InitDB(dbFile string) error {
 	var err error
-	db, err = sql.Open("sqlite3", dbFile)
+	db, err = sql.Open("sqlite", dbFile)
 	if err != nil {
 		return err
 	}
@@ -36,7 +37,7 @@ func SaveUrl(newUrl ShortURL) error {
 }
 
 func FindUrls() ([]ShortURL, error) {
-	rows, err := db.Query("SELECT ShortURL, OriginalURL FROM ShortURL")
+	rows, err := db.Query("SELECT * FROM ShortURL")
 	if err != nil {
 		return nil, err
 	}
@@ -48,8 +49,14 @@ func FindUrls() ([]ShortURL, error) {
 		if err := rows.Scan(&url.ShortURL, &url.OriginalURL); err != nil {
 			return nil, err
 		}
+		fmt.Printf("ShortURL: %s, OriginalURL: %s\n", url.ShortURL, url.OriginalURL) // Print each URL
 		urls = append(urls, url)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return urls, nil
 }
 
