@@ -9,8 +9,6 @@ import (
 	"github.com/tornado-hub/url-app/server/storage"
 )
 
-var shortURLs map[string]string = make(map[string]string)
-
 func handleRoot(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello"))
 }
