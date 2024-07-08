@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	_ "net/http"
+	"net/http"
 
-	_ "github.com/tornado-hub/url-app/server/router"
+	"github.com/tornado-hub/url-app/server/router"
 	"github.com/tornado-hub/url-app/server/storage"
 	//"github.com/tornado-hub/url-app/server/Urls"
 )
@@ -12,8 +12,8 @@ import (
 func main() {
 	storage.InitDB("shorturl.db")
 	fmt.Print(storage.FindUrls())
-	//r := router.NewRouter()
+	r := router.NewRouter()
 
 	fmt.Println("Server listening on port 3000...")
-	//http.ListenAndServe(":8000", r)
+	http.ListenAndServe(":8000", r)
 }

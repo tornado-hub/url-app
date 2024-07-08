@@ -24,6 +24,7 @@ func NewRouter() http.Handler {
 	r.Get("/{shortURL}", handleRedirect)
 	r.Post("/shorten", handleShortenURL)
 	r.Get("/urls", handleurls)
+	r.Delete("/delete", handleDeleteUrl)
 
 	return r
 }

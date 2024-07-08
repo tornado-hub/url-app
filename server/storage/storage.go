@@ -2,7 +2,6 @@ package storage
 
 import (
 	"database/sql"
-	"fmt"
 
 	_ "github.com/glebarez/go-sqlite"
 )
@@ -49,7 +48,6 @@ func FindUrls() ([]ShortURL, error) {
 		if err := rows.Scan(&url.ShortURL, &url.OriginalURL); err != nil {
 			return nil, err
 		}
-		fmt.Printf("ShortURL: %s, OriginalURL: %s\n", url.ShortURL, url.OriginalURL) // Print each URL
 		urls = append(urls, url)
 	}
 
@@ -67,4 +65,9 @@ func FindLongUrl(shortUrl string) (string, error) {
 		return "", err
 	}
 	return originalUrl, nil
+}
+
+func DeleteUrl(shortUrl string) error {
+	_, err := db.Exec("DELETE FROM ShortURL WHERE ShortURL = ?", shortUrl)
+	return err
 }

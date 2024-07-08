@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import UrlForm from './components/UrlForm';
 import UrlList from './components/UrlList';
+import './index.css'; // Import the custom CSS
 
 function App() {
   const [urls, setUrls] = useState([]);
@@ -22,11 +23,11 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ original_url: originalUrl }), // Ensure 'original_url' matches backend JSON key
+        body: JSON.stringify({ original_url: originalUrl }),
       });
 
       if (response.ok) {
-        fetchUrls(); // Refresh the list of URLs
+        fetchUrls();
       } else {
         console.error('Error shortening URL:', response.statusText);
       }
@@ -35,15 +36,35 @@ function App() {
     }
   };
 
+  const handleDelete = async (shortUrl) => {
+    try {
+      const response = await fetch('http://localhost:8000/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ short_url: shortUrl }),
+      });
+
+      if (response.ok) {
+        fetchUrls();
+      } else {
+        console.error('Error deleting URL:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting URL:', error);
+    }
+  };
+
   useEffect(() => {
     fetchUrls();
   }, []);
 
   return (
-    <div>
-      <h1>URL Shortener</h1>
+    <div className="container">
+      <h1 className="text-center my-4">URL Shortener</h1>
       <UrlForm onSubmit={handleSubmit} />
-      <UrlList urls={urls} />
+      <UrlList urls={urls} onDelete={handleDelete} />
     </div>
   );
 }
