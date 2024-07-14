@@ -1,4 +1,4 @@
-import React,{Component} from "React";
+import React,{Component} from "react";
 import axios from "axios";
 import {Cards, Header, Form, Input, Icon} from "semantic-ui-react";
 
